@@ -1,7 +1,4 @@
-package week1.BOJ5430.twalla26;
-
 import java.io.*;
-import java.util.*;
 
 public class Solution {
 

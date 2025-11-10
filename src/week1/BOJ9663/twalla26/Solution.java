@@ -1,5 +1,3 @@
-package week1.BOJ9663.twalla26;
-
 import java.io.*;
 import java.util.*;
 
