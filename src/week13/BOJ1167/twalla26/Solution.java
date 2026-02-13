@@ -7,48 +7,25 @@ public class Solution {
     public static StringBuilder sb = new StringBuilder();
     public static StringTokenizer st;
 
-    static int V, INF = 1_000_000_000;
-    static long[] distance;
+    static int V;
     static List<List<Node>> graph;
+    static int farthestNode = 0, maxDist = 0;
+    static boolean[] visited;
 
-    static int dijkstra(int S) {
+    static void dfs(int index, int dist) {
 
-        PriorityQueue<Node> pq = new PriorityQueue<>((o1, o2) -> {
-            return o1.cost - o2.cost;
-        });
-        distance = new long[V + 1];
-        Arrays.fill(distance, INF);
-        
-        pq.add(new Node(S, 0));
-        distance[S] = 0;
+        visited[index] = true;
 
-        while (!pq.isEmpty()) {
-            Node cur = pq.poll();
-            int curIndex = cur.index;
-            int curCost = cur.cost;
-
-            if (distance[curIndex] < curCost) {
-                continue;
-            }
-
-            for (Node next : graph.get(curIndex)) {
-                if (distance[next.index] > curCost + next.cost) {
-                    distance[next.index] = curCost + next.cost;
-                    pq.add(new Node(next.index, curCost + next.cost));
-                }
-            }
+        if (dist > maxDist) {
+            maxDist = dist;
+            farthestNode = index;
         }
 
-        long max = 0;
-        int maxI = 0;
-        for (int i = 1; i < V + 1; i++) {
-            if (max < distance[i]) {
-                max = distance[i];
-                maxI = i;
+        for (Node next : graph.get(index)) {
+            if (!visited[next.index]) {
+                dfs(next.index, dist + next.cost);
             }
         }
-
-        return maxI;
     }
 
     public static void main(String[] args) throws Exception {
@@ -77,10 +54,15 @@ public class Solution {
             }
         }
 
-        int A = dijkstra(1);
-        int B = dijkstra(A);
+        visited = new boolean[V + 1];
+        dfs(1, 0);
 
-        System.out.println(distance[B]);
+        maxDist = 0;
+
+        visited = new boolean[V + 1];
+        dfs(farthestNode, 0);
+
+        System.out.println(maxDist);
     }
 }
 
