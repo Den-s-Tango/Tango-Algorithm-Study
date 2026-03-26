@@ -10,26 +10,16 @@ public class Solution {
     static int[] solution(int N, int[] input) {
 
         int[] result = new int[N];
+        Arrays.fill(result, -1);
 
-        Stack<Node> stack = new Stack<>();
+        Stack<Integer> stack = new Stack<>();
         for (int i = 0; i < N; i++) {
 
-            Node cur = new Node(input[i], i);
-            if (stack.isEmpty() || stack.peek().num >= cur.num) {
-                stack.push(cur);
-                continue;
+            while (!stack.isEmpty() && input[stack.peek()] < input[i]) {
+                int prevIndex = stack.pop();
+                result[prevIndex] = input[i];
             }
-
-            while (!stack.isEmpty() && stack.peek().num < cur.num) {
-                Node prev = stack.pop();
-                result[prev.index] = cur.num;
-            }
-            stack.push(cur);
-        }
-
-        while (!stack.isEmpty()) {
-            Node prev = stack.pop();
-            result[prev.index] = -1;
+            stack.push(i);
         }
 
         return result;
@@ -50,15 +40,5 @@ public class Solution {
             sb.append(result[i]).append(" ");
         }
         System.out.println(sb);
-    }
-}
-
-class Node {
-    int num;
-    int index;
-
-    public Node(int num, int index) {
-        this.num = num;
-        this.index = index;
     }
 }
