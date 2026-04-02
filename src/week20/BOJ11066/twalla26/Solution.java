@@ -7,7 +7,7 @@ public class Solution {
     public static StringBuilder sb = new StringBuilder();
     public static StringTokenizer st;
 
-    static int INF = 5_000_000;
+    static int INF = Integer.MAX_VALUE;
     static int K;
     static int[] files, sum;
     static int[][] cache;
@@ -22,18 +22,15 @@ public class Solution {
 
     static int dp(int s, int e) {
 
-        if (cache[s][e] != -1) {
-            return cache[s][e];
-        }
+        for (int len = 2; len <= K; len++) {
+            for (int i = 0; i <= K - len; i++) {
+                int j = i + len - 1;
+                cache[i][j] = INF;
 
-        if (s == e) {
-            return 0;
-        }
-        
-        cache[s][e] = INF;
-        for (int i = s; i < e; i++) {
-            int cost = dp(s, i) + dp(i + 1, e) + getSum(s, e);
-            cache[s][e] = Math.min(cache[s][e], cost);
+                for (int k = i; k < j; k++) {
+                    cache[i][j] = Math.min(cache[i][j], cache[i][k] + cache[k + 1][j] + getSum(i ,j));
+                }
+            }
         }
 
         return cache[s][e];
@@ -62,6 +59,7 @@ public class Solution {
             cache = new int[K][K];
             for (int i = 0; i < K; i++) {
                 Arrays.fill(cache[i], -1);
+                cache[i][i] = 0;
             }
 
             int result = dp(0, K - 1);
