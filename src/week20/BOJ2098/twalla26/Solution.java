@@ -16,7 +16,7 @@ public class Solution {
         if (visited == (1 << N) - 1) {
             if (W[cur][0] > 0) {
                 return W[cur][0];
-            }
+            } 
             return INF;
         }
 
@@ -27,16 +27,18 @@ public class Solution {
         cache[cur][visited] = INF;
 
         for (int next = 0; next < N; next++) {
-            if (W[cur][next] == 0 || (visited & (1 << next)) != 0) {
+
+            if (W[cur][next] == 0 || (visited & 1 << next) > 0) {
                 continue;
             }
 
-            int cost = dfs(next, visited | (1 << next));
+            int cost = dfs(next, visited | 1 << next);
             cache[cur][visited] = Math.min(cache[cur][visited], W[cur][next] + cost);
         }
 
         return cache[cur][visited];
     }
+
 
     public static void main(String[] args) throws Exception {
 
@@ -56,7 +58,7 @@ public class Solution {
         }
 
         int result = dfs(0, 1);
-        
+
         System.out.println(result);
     }
 }
